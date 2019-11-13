@@ -32,8 +32,12 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"相册" style:UIBarButtonItemStylePlain target:self action:@selector(enterPhotoAlbum:)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"清除" style:UIBarButtonItemStylePlain target:self action:@selector(clearPhotoAlbum:)];
 }
 
+- (void)clearPhotoAlbum:(UIBarButtonItem *)item{
+    [self.textView setText:@""];
+}
 
 -(void)enterPhotoAlbum:(UIBarButtonItem *)item{
     //相册权限
@@ -42,14 +46,15 @@
             //打开相册
             RFPhotoController *vc = [[RFPhotoController alloc]init];
             vc.permitPicCount = 6;
-            [vc rfPhotoKitSelectedBlock:^(NSArray<NSDictionary *> *result) {
+            [vc rfPhotoKitSelectedBlock:^(NSArray *result) {
                 [self setTextViewWithPhotos:result];
-                NSLog(@"dddd");
             }];
             UINavigationController *navi = [[UINavigationController alloc]initWithRootViewController:vc];
+            navi.modalPresentationStyle = UIModalPresentationFullScreen;//iOS13适配
+            
             [self.navigationController presentViewController:navi animated:YES completion:nil];
         }else{//未授权
-            UIAlertController * alertVC = [UIAlertController alertControllerWithTitle:@"您没赋予本程序相机权限" message:@"是否去设置" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertController * alertVC = [UIAlertController alertControllerWithTitle:@"您没赋予本程序访问相册权限" message:@"是否去设置" preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction * ok = [UIAlertAction actionWithTitle:@"去设置" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
                 if ([[UIApplication sharedApplication] canOpenURL:url]) {
@@ -60,14 +65,12 @@
             [alertVC addAction:cancel];
             [alertVC addAction:ok];
             [self presentViewController:alertVC animated:NO completion:NULL];
-            
         }
     }];
 }
 
 -(void)setTextViewWithPhotos:(NSArray*)photos{
-    for (NSDictionary * dic in photos) {
-        UIImage * image = dic[RFPhotoImage];
+    for (UIImage * image in photos) {
         NSUInteger location = self.textView.selectedRange.location ;
         NSTextAttachment * attachMent = [[NSTextAttachment alloc] init];
         attachMent.image = image;
@@ -101,6 +104,5 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
 
 @end

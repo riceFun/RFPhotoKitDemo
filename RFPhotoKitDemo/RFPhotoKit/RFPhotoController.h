@@ -10,7 +10,7 @@
 #import "RFPhotoKitManager.h"
 #import "RFPhotoKitConstant.h"
 
-typedef  void(^RFPhotoResultBlock)(NSArray<NSDictionary *> *result);
+typedef  void(^RFPhotoResultBlock)(NSArray *result);
 
 @interface RFPhotoController : UIViewController
 @property (nonatomic,assign) NSInteger permitPicCount;

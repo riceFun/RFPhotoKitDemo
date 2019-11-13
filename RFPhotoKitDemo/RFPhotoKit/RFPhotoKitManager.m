@@ -9,9 +9,10 @@
 #import "RFPhotoKitManager.h"
 #import "RFPhotoKitConstant.h"
 
+
 @implementation RFPhotoKitManager
 
-+(RFPhotoKitManager *)sharedInstance{
++ (RFPhotoKitManager *)sharedInstance{
     static RFPhotoKitManager *instance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -21,7 +22,7 @@
 }
 
 //查询相册访问权限
--(void)rf_checkPhotoAlbumAuthorizationHandler:(void(^)(BOOL isAuthorized))handler{
+- (void)rf_checkPhotoAlbumAuthorizationHandler:(void(^)(BOOL isAuthorized))handler{
     if (handler) {
         [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -35,42 +36,40 @@
     }
 }
 
-//获取全部相册
--(NSMutableArray<PHAssetCollection *> *)rf_getAllAlbums{
-    NSMutableArray *dataArray = [NSMutableArray array];
-    //获取资源时的参数，为nil时则是使用系统默认值
-    PHFetchOptions *fetchOptions = [[PHFetchOptions alloc]init];
-    //列出所有车的智能相册
-    PHFetchResult *smartAlbumsFetchResult = [PHAssetCollection fetchAssetCollectionsWithType:(PHAssetCollectionTypeSmartAlbum) subtype:PHAssetCollectionSubtypeSmartAlbumUserLibrary options:fetchOptions];
-//    [dataArray addObject:[smartAlbumsFetchResult objectAtIndex:0]];
-    for (PHAssetCollection *sub in smartAlbumsFetchResult) {
-        [dataArray addObject:sub];
+//获取所有的子相册,包含空的相册
+- (NSArray<PHAssetCollection *> *)rf_queryAllAlbums {
+    NSMutableArray *fetchResult = [NSMutableArray array];
+    //获取智能相册
+    PHFetchResult *smartAlbum = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAny options:nil];
+    for (PHAssetCollection *sub in smartAlbum) {
+        [fetchResult addObject:sub];
     }
-    
-    //列出所有用户创建的相册
-    PHFetchResult *userCreatAlbumsFetchResult = [PHAssetCollection fetchTopLevelUserCollectionsWithOptions:fetchOptions];
-    for (PHAssetCollection *sub1 in userCreatAlbumsFetchResult) {
-        [dataArray addObject:sub1];
+    //用户创建的相册
+    PHFetchResult *userAlbum = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
+    for (PHAssetCollection *sub in userAlbum) {
+        [fetchResult addObject:sub];
     }
-    return [dataArray mutableCopy];
+    return [fetchResult copy];
 }
 
-//获取某个相册的结果集
--(PHFetchResult<PHAsset *> *)rf_getFetchResult:(PHAssetCollection *)assetCollection ascend:(BOOL)ascend{
-    PHFetchOptions *options = [[PHFetchOptions alloc] init];
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 9.0f) {
-        options.includeAssetSourceTypes = PHAssetSourceTypeUserLibrary;
-    }
+/** 从某个子相册中根据查询类型获取具体的结果集<PHAsset>
+ assetCollection 被查询的相册
+ ascend 升降序
+ mediaType 媒体类型
+ */
+
+- (PHFetchResult<PHAsset *> *) rf_queryFetchResultWithAssetCollection:(PHAssetCollection *)assetCollection mediaType:(PHAssetMediaType)mediaType ascend:(BOOL)ascend {
+    PHFetchOptions *fetchOptions = [[PHFetchOptions alloc] init];
     //时间排序
-    options.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:ascend]];
-    PHFetchResult *allPhotos = [PHAsset fetchAssetsInAssetCollection:assetCollection options:options];
-    return allPhotos;
+    fetchOptions.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:ascend]];
+    fetchOptions.predicate = [NSPredicate predicateWithFormat:@"mediaType = %i",mediaType];
+    return  [PHAsset fetchAssetsInAssetCollection:assetCollection options:fetchOptions];
 }
 
 //根据某种媒体类型获取某种媒体的结果集
 -(PHFetchResult<PHAsset *> *)rf_getFetchResultWithMediaType:(PHAssetMediaType)mediaType ascend:(BOOL)ascend{
     PHFetchOptions *options = [[PHFetchOptions alloc] init];
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 9.0f) {
+    if (@available(iOS 9.0, *)) {
         options.includeAssetSourceTypes = PHAssetSourceTypeUserLibrary;
     }
     options.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:ascend]];
@@ -80,7 +79,7 @@
 -(PHFetchResult<PHAsset *> *)rf_getCameraRollFetchResulWithAscerf_nd:(BOOL)ascend{
     //获取系统相册CameraRoll 的结果集
     PHFetchOptions *fetchOptions = [[PHFetchOptions alloc]init];
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 9.0f) {
+    if (@available(iOS 9.0, *)) {
         fetchOptions.includeAssetSourceTypes = PHAssetSourceTypeUserLibrary;
     }
     fetchOptions.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:ascend]];
@@ -153,11 +152,7 @@
             [[PHCachingImageManager defaultManager] requestImageForAsset:asset targetSize:imageSize contentMode:PHImageContentModeAspectFill options:options resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
                 //resultHandler默认在主线程，requestImageForAsset在子线程执行后resultHandler变为在子线程
                 if (result) {
-                    //压缩图片，可用于上传
-                    NSData * data = [UIImage resetSizeOfImageData:result compressQuality:0.2];
-                    UIImage * image = [UIImage imageWithData:data];
-                    NSDictionary * dic = @{RFPhotoImage:image,RFPhotoName:asset.localIdentifier};
-                    [callBackPhotos addObject:dic];
+                    [callBackPhotos addObject:result];
                     if (resultHandler && callBackPhotos.count == assets.count) {
                         dispatch_async(dispatch_get_main_queue(), ^{
                             resultHandler(callBackPhotos);
@@ -170,6 +165,33 @@
     }
 }
 
+//获取智能相册中文名字
+- (NSString *)rf_albumChineseNameWithAssetCollection:(PHAssetCollection *)assetCollection {
+    //如果是智能相册，那么要获取对应的中文名字
+    if (assetCollection.assetCollectionType == PHAssetCollectionTypeSmartAlbum) {
+        NSDictionary *nameMatchDic = @{
+            @"Bursts":@"连拍快照",
+            @"Screenshots":@"截屏",
+            @"Panoramas":@"全景照片",
+            @"Hidden":@"隐藏",
+            @"Long Exposure":@"长曝光",
+            @"Animated":@"动图",
+            @"Recents":@"最近项目",
+            @"Slo-mo":@"慢动作",
+            @"Portrait":@"人像",
+            @"Time-lapse":@"延时",
+            @"Videos":@"视频",
+            @"Live Photos":@"实况照片",
+            @"Selfies":@"自拍",
+            @"Favorites":@"个人收藏",
+        };
+        
+        NSString *albumChineseName = nameMatchDic[assetCollection.localizedTitle];
+        return albumChineseName ? albumChineseName : @"未知相册";
+    } else {
+        return assetCollection.localizedTitle ? assetCollection.localizedTitle : @"未知相册";
+    }
+}
 
 #pragma mark private method
 -(CGSize)rf_imageSizeForAsset:(PHAsset *)asset{

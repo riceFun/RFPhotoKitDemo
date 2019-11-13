@@ -12,7 +12,7 @@
 /**
  *  根据颜色生成图片
  */
-- (UIImage *) maskWithColor:(UIColor *)color;
+- (UIImage *)maskWithColor:(UIColor *)color;
 
 
 /**

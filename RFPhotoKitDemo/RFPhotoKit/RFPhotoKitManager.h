@@ -13,16 +13,21 @@
 
 @interface RFPhotoKitManager : NSObject
 
-+(RFPhotoKitManager *)sharedInstance;
++ (RFPhotoKitManager *)sharedInstance;
 
 //查询相册访问权限
--(void)rf_checkPhotoAlbumAuthorizationHandler:(void(^)(BOOL isAuthorized))handler;
+- (void)rf_checkPhotoAlbumAuthorizationHandler:(void(^)(BOOL isAuthorized))handler;
 
-//获取全部相册
--(NSMutableArray<PHAssetCollection *> *)rf_getAllAlbums;
+//获取所有的子相册
+- (NSArray<PHAssetCollection *> *)rf_queryAllAlbums;
 
-//获取某个相册的结果集
--(PHFetchResult<PHAsset *> *)rf_getFetchResult:(PHAssetCollection *)assetCollection ascend:(BOOL)ascend;
+/** 从某个子相册中根据查询类型获取具体的结果集<PHAsset>
+ assetCollection 被查询的相册
+ ascend 升降序
+ mediaType 媒体类型
+ */
+
+- (PHFetchResult<PHAsset *> *) rf_queryFetchResultWithAssetCollection:(PHAssetCollection *)assetCollection mediaType:(PHAssetMediaType)mediaType ascend:(BOOL)ascend;
 
 //根据某种媒体类型获取某种媒体的结果集(按时间排序)
 -(PHFetchResult<PHAsset *> *)rf_getFetchResultWithMediaType:(PHAssetMediaType)mediaType ascend:(BOOL)ascend;
@@ -36,5 +41,7 @@
 //同时获取多张图片(高清)
 -(void)rf_getImagesForAssets:(NSArray<PHAsset *> *)assets progressHandler:(void(^)(double progress, NSError * error, BOOL *stop, NSDictionary * info))progressHandler resultHandler:(void (^)(NSArray<NSDictionary *> *))resultHandler;
 
+//获取智能相册中文名字
+- (NSString *)rf_albumChineseNameWithAssetCollection:(PHAssetCollection *)assetCollection;
 
 @end
