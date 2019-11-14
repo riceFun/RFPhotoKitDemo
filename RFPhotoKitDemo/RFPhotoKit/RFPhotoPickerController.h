@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "RFPhotoTool.h"
-#import "RFPhotoKitConstant.h"
 
 typedef  void(^RFPhotoResultBlock)(NSArray *result);
 

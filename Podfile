@@ -6,7 +6,7 @@ target 'RFPhotoKitDemo' do
   # use_frameworks!
 
   # Pods for RFPhotoKitDemo
-    pod 'SVProgressHUD'
+    
 
   target 'RFPhotoKitDemoTests' do
     inherit! :search_paths

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0930"
+   LastUpgradeVersion = "1100"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,10 +14,10 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3C26A6F43D96A9DACF0C773EE05FABAD"
+               BlueprintIdentifier = "16B50A1E52526ACFE2299D260940B086"
+               BuildableName = "libPods-RFPhotoKitDemoUITests.a"
                BlueprintName = "Pods-RFPhotoKitDemoUITests"
-               ReferencedContainer = "container:Pods.xcodeproj"
-               BuildableName = "libPods-RFPhotoKitDemoUITests.a">
+               ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

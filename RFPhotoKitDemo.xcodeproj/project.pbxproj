@@ -69,7 +69,6 @@
 		213C2E0021B79C7300B4129D /* RFPhotoPickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RFPhotoPickerController.h; sourceTree = "<group>"; };
 		213C2E0121B79C7300B4129D /* RFPhotoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RFPhotoCell.xib; sourceTree = "<group>"; };
 		213C2E0221B79C7300B4129D /* RFPhotoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RFPhotoCell.h; sourceTree = "<group>"; };
-		213C2E0421B79C7300B4129D /* RFPhotoKitConstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RFPhotoKitConstant.h; sourceTree = "<group>"; };
 		213C2E0521B79C7300B4129D /* RFPhotoTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RFPhotoTool.h; sourceTree = "<group>"; };
 		213C2E0621B79C7300B4129D /* selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = selected.png; sourceTree = "<group>"; };
 		213C2E0721B79C7300B4129D /* RFPhotoPickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RFPhotoPickerController.m; sourceTree = "<group>"; };
@@ -180,7 +179,6 @@
 		213C2DFF21B79C7300B4129D /* RFPhotoKit */ = {
 			isa = PBXGroup;
 			children = (
-				213C2E0421B79C7300B4129D /* RFPhotoKitConstant.h */,
 				2190CD23237CF52800429334 /* RFPhotoManager.h */,
 				2190CD24237CF52800429334 /* RFPhotoManager.m */,
 				213C2E0B21B79C7400B4129D /* RFPhotoTool.m */,
@@ -232,7 +230,6 @@
 				213C2DC321B79C3C00B4129D /* Sources */,
 				213C2DC421B79C3C00B4129D /* Frameworks */,
 				213C2DC521B79C3C00B4129D /* Resources */,
-				C6014292B060CFD5E065CC9A /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -389,24 +386,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C6014292B060CFD5E065CC9A /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-RFPhotoKitDemo/Pods-RFPhotoKitDemo-resources.sh",
-				"${PODS_ROOT}/SVProgressHUD/SVProgressHUD/SVProgressHUD.bundle",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SVProgressHUD.bundle",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RFPhotoKitDemo/Pods-RFPhotoKitDemo-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E67C311B5710E6BAC76B5D7B /* [CP] Check Pods Manifest.lock */ = {

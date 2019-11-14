@@ -7,7 +7,7 @@
 //
 
 #import "RFPhotoTool.h"
-#import "RFPhotoKitConstant.h"
+#import <UIKit/UIKit.h>
 
 @interface RFPhotoTool ()
 
@@ -131,9 +131,7 @@
 //同时获取多张图片(高清)
 + (void)rf_getImagesForAssets:(NSArray<PHAsset *> *)assets progressHandler:(void(^)(double progress, NSError * error, BOOL *stop, NSDictionary * info))progressHandler resultHandler:(void (^)(NSArray<NSDictionary *> *))resultHandler{
     
-    NSMutableArray * callBackPhotos = [NSMutableArray array];
-    
-    //此处在子线程中执行requestImageForAsset原因：options.synchronous设为同步时,options.progressHandler获取主队列会死锁
+    NSMutableArray * callBackPhotos = [NSMutableArray array];    //此处在子线程中执行requestImageForAsset原因：options.synchronous设为同步时,options.progressHandler获取主队列会死锁
     NSOperationQueue * queue = [[NSOperationQueue alloc] init];
     queue.maxConcurrentOperationCount = 1;
     
@@ -171,8 +169,12 @@
 
 //获取智能相册中文名字
 + (NSString *)rf_albumChineseNameWithAssetCollection:(PHAssetCollection *)assetCollection {
+    
     //如果是智能相册，那么要获取对应的中文名字
     if (assetCollection.assetCollectionType == PHAssetCollectionTypeSmartAlbum) {
+        if ([RFPhotoTool isChinese:assetCollection.localizedTitle]) {//如果是中文，说明已经做了本地化处理，直接返回相册名称
+            return assetCollection.localizedTitle;
+        }
         NSDictionary *nameMatchDic = @{
             @"Bursts":@"连拍快照",
             @"Screenshots":@"截屏",
@@ -205,6 +207,12 @@
     CGFloat pixelWidth = photoWidth * multiple;
     CGFloat pixelHeight = pixelWidth / aspectRatio;
     return  CGSizeMake(pixelWidth, pixelHeight);
+}
+
++ (BOOL)isChinese:(NSString *)string{
+    NSString *match = @"(^[\u4e00-\u9fa5]+$)";
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF matches %@", match];
+    return [predicate evaluateWithObject:string];
 }
 
 @end

@@ -9,7 +9,6 @@
 #import "RFPhotoManager.h"
 #import "RFPhotoTool.h"
 #import "RFPhotoPickerController.h"
-#import "RFPhotoKitConstant.h"
 
 @interface RFPhotoManager ()<UINavigationControllerDelegate,UIImagePickerControllerDelegate>
 @property (nonatomic,copy) RFPhotoManagerCallBack callBack;

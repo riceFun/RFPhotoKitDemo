@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "RFPhotoKitConstant.h"
+#import <Photos/Photos.h>
 
 @interface RFPhotoTool : NSObject
 
@@ -42,4 +42,5 @@
 
 //获取智能相册中文名字
 + (NSString *)rf_albumChineseNameWithAssetCollection:(PHAssetCollection *)assetCollection;
+
 @end

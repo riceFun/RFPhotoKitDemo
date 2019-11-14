@@ -10,11 +10,14 @@
 #import "RFPhotoCell.h"
 
 #import <objc/runtime.h>
-#import <SVProgressHUD/SVProgressHUD.h>
 
 const void * _Nonnull rfPhotoKitkey;
 #define rfCollectionViewCellReusedKey @"rfCollectionViewCellReusedKey"
 #define rfTableViewCellReusedKey @"rfTableViewCellReusedKey"
+
+#define MARGIN 3
+#define RFSCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
+#define RFSCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
 
 @interface RFPhotoPickerController ()<UICollectionViewDataSource,UICollectionViewDelegate,UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic,strong)UIButton *albumSelectBtn;
@@ -78,12 +81,10 @@ const void * _Nonnull rfPhotoKitkey;
     [RFPhotoTool rf_getImagesForAssets:self.selectedAssets progressHandler:^(double progress, NSError *error, BOOL *stop, NSDictionary *info) {
         if (error) {
             NSLog(@"iClound error:  %@ ",error);
-            [SVProgressHUD dismiss];
             return ;
         }
-        [SVProgressHUD showWithStatus:@"同步iCloud中"];
+        NSLog(@"同步iCloud中");
     } resultHandler:^(NSArray<NSDictionary *> *result) {
-        [SVProgressHUD dismiss];
         [weakSelf.navigationController dismissViewControllerAnimated:YES completion:nil];
         RFPhotoResultBlock photoResultBlock = objc_getAssociatedObject(self, rfPhotoKitkey);
         if (photoResultBlock) {

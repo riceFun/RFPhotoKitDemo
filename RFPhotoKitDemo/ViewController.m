@@ -8,7 +8,6 @@
 
 #import "ViewController.h"
 #import "RFPhotoManager.h"
-#import "RFPhotoKitConstant.h"
 
 @interface ViewController ()
 @property (nonatomic,strong) UITextView *textView;
@@ -79,9 +78,9 @@
 - (CGSize)displaySizeWithImage:(UIImage *)image {
     CGSize displaySize;
     if (image.size.width !=0 ) {
-        CGFloat _widthRadio = RFSCREEN_WIDTH / image.size.width;
+        CGFloat _widthRadio = [UIScreen mainScreen].bounds.size.width / image.size.width;
         CGFloat _imageHeight = image.size.height * _widthRadio;
-        displaySize = CGSizeMake(RFSCREEN_WIDTH, _imageHeight);
+        displaySize = CGSizeMake([UIScreen mainScreen].bounds.size.width, _imageHeight);
     }else{
         displaySize = CGSizeZero;
     }
