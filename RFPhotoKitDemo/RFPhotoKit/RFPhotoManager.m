@@ -91,11 +91,11 @@
     //判断是否支持摄像
     UIImagePickerControllerSourceType sourceType = UIImagePickerControllerSourceTypeCamera;
     if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        UIImagePickerController *picker = [[UIImagePickerController alloc]init];//PS:UIImagePickerController一般会显示英文界面，改为中文界面请参考 https://www.jianshu.com/p/6ce6e293b268
-        picker.delegate = self;
-        picker.sourceType = sourceType;
-        picker.allowsEditing = YES;
         dispatch_async(dispatch_get_main_queue(), ^{
+            UIImagePickerController *picker = [[UIImagePickerController alloc]init];//PS:UIImagePickerController一般会显示英文界面，改为中文界面请参考 https://www.jianshu.com/p/6ce6e293b268
+            picker.delegate = self;
+            picker.sourceType = sourceType;
+            picker.allowsEditing = YES;
             [targetVC presentViewController:picker animated:YES completion:nil];
         });
     } else {
