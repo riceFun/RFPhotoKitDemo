@@ -6,23 +6,17 @@
 //  Copyright © 2018年 riceFun. All rights reserved.
 //
 
-#import "RFPhotoKitManager.h"
+#import "RFPhotoTool.h"
 #import "RFPhotoKitConstant.h"
 
+@interface RFPhotoTool ()
 
-@implementation RFPhotoKitManager
+@end
 
-+ (RFPhotoKitManager *)sharedInstance{
-    static RFPhotoKitManager *instance = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        instance = [[RFPhotoKitManager alloc]init];
-    });
-    return instance;
-}
+@implementation RFPhotoTool
 
 //查询相册访问权限
-- (void)rf_checkPhotoAlbumAuthorizationHandler:(void(^)(BOOL isAuthorized))handler{
++ (void)rf_checkPhotoAlbumAuthorizationHandler:(void(^)(BOOL isAuthorized))handler{
     if (handler) {
         [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -36,8 +30,19 @@
     }
 }
 
+//查询相机访问权限
++ (void)rf_checkCameraAuthorizationHandler:(void(^)(BOOL isAuthorized))handler{
+    if (handler) {
+        [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
+            handler(granted);
+        }];
+    }
+}
+
+
+
 //获取所有的子相册,包含空的相册
-- (NSArray<PHAssetCollection *> *)rf_queryAllAlbums {
++ (NSArray<PHAssetCollection *> *)rf_queryAllAlbums {
     NSMutableArray *fetchResult = [NSMutableArray array];
     //获取智能相册
     PHFetchResult *smartAlbum = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAny options:nil];
@@ -57,8 +62,7 @@
  ascend 升降序
  mediaType 媒体类型
  */
-
-- (PHFetchResult<PHAsset *> *) rf_queryFetchResultWithAssetCollection:(PHAssetCollection *)assetCollection mediaType:(PHAssetMediaType)mediaType ascend:(BOOL)ascend {
++ (PHFetchResult<PHAsset *> *) rf_queryFetchResultWithAssetCollection:(PHAssetCollection *)assetCollection mediaType:(PHAssetMediaType)mediaType ascend:(BOOL)ascend {
     PHFetchOptions *fetchOptions = [[PHFetchOptions alloc] init];
     //时间排序
     fetchOptions.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:ascend]];
@@ -67,7 +71,7 @@
 }
 
 //根据某种媒体类型获取某种媒体的结果集
--(PHFetchResult<PHAsset *> *)rf_getFetchResultWithMediaType:(PHAssetMediaType)mediaType ascend:(BOOL)ascend{
++ (PHFetchResult<PHAsset *> *)rf_getFetchResultWithMediaType:(PHAssetMediaType)mediaType ascend:(BOOL)ascend{
     PHFetchOptions *options = [[PHFetchOptions alloc] init];
     if (@available(iOS 9.0, *)) {
         options.includeAssetSourceTypes = PHAssetSourceTypeUserLibrary;
@@ -76,7 +80,7 @@
     return  [PHAsset fetchAssetsWithMediaType:mediaType options:options];
 }
 
--(PHFetchResult<PHAsset *> *)rf_getCameraRollFetchResulWithAscerf_nd:(BOOL)ascend{
++ (PHFetchResult<PHAsset *> *)rf_getCameraRollFetchResulWithAscerf_nd:(BOOL)ascend{
     //获取系统相册CameraRoll 的结果集
     PHFetchOptions *fetchOptions = [[PHFetchOptions alloc]init];
     if (@available(iOS 9.0, *)) {
@@ -89,7 +93,7 @@
 }
 
 //获取低质量的图片
--(void)rf_getImageLowQualityForAsset:(PHAsset *)asset targetSize:(CGSize)targetSize resultHandler:(void (^)(UIImage* result, NSDictionary * info))resultHandler{
++ (void)rf_getImageLowQualityForAsset:(PHAsset *)asset targetSize:(CGSize)targetSize resultHandler:(void (^)(UIImage* result, NSDictionary * info))resultHandler{
     [[PHCachingImageManager defaultManager] requestImageForAsset:asset targetSize:targetSize contentMode:PHImageContentModeAspectFill options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
         if (result && resultHandler) {
             resultHandler(result,info);
@@ -98,9 +102,9 @@
 }
 
 //获取高质量的图片
--(void)rf_getImageHighQualityForAsset:(PHAsset *)asset progressHandler:(void(^)(double progress, NSError * error, BOOL *stop, NSDictionary * info))progressHandler resultHandler:(void (^)(UIImage* result, NSDictionary * info))resultHandler{
++ (void)rf_getImageHighQualityForAsset:(PHAsset *)asset progressHandler:(void(^)(double progress, NSError * error, BOOL *stop, NSDictionary * info))progressHandler resultHandler:(void (^)(UIImage* result, NSDictionary * info))resultHandler{
     
-    CGSize imageSize = [self rf_imageSizeForAsset:asset];
+    CGSize imageSize = [RFPhotoTool rf_imageSizeForAsset:asset];
     PHImageRequestOptions * options = [[PHImageRequestOptions alloc] init];
     //设置该模式，若本地无高清图会立即返回缩略图，需要从iCloud下载高清，会再次调用resultHandler返回下载后的高清图
     options.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;
@@ -125,7 +129,7 @@
 }
 
 //同时获取多张图片(高清)
--(void)rf_getImagesForAssets:(NSArray<PHAsset *> *)assets progressHandler:(void(^)(double progress, NSError * error, BOOL *stop, NSDictionary * info))progressHandler resultHandler:(void (^)(NSArray<NSDictionary *> *))resultHandler{
++ (void)rf_getImagesForAssets:(NSArray<PHAsset *> *)assets progressHandler:(void(^)(double progress, NSError * error, BOOL *stop, NSDictionary * info))progressHandler resultHandler:(void (^)(NSArray<NSDictionary *> *))resultHandler{
     
     NSMutableArray * callBackPhotos = [NSMutableArray array];
     
@@ -134,7 +138,7 @@
     queue.maxConcurrentOperationCount = 1;
     
     for (PHAsset * asset in assets) {
-        CGSize imageSize = [self rf_imageSizeForAsset:asset];
+        CGSize imageSize = [RFPhotoTool rf_imageSizeForAsset:asset];
         PHImageRequestOptions * options = [[PHImageRequestOptions alloc] init];
         //        options.deliveryMode = PHImageRequestOptionsDeliveryModeFastFormat;
         options.resizeMode = PHImageRequestOptionsResizeModeExact;
@@ -166,7 +170,7 @@
 }
 
 //获取智能相册中文名字
-- (NSString *)rf_albumChineseNameWithAssetCollection:(PHAssetCollection *)assetCollection {
++ (NSString *)rf_albumChineseNameWithAssetCollection:(PHAssetCollection *)assetCollection {
     //如果是智能相册，那么要获取对应的中文名字
     if (assetCollection.assetCollectionType == PHAssetCollectionTypeSmartAlbum) {
         NSDictionary *nameMatchDic = @{
@@ -194,7 +198,7 @@
 }
 
 #pragma mark private method
--(CGSize)rf_imageSizeForAsset:(PHAsset *)asset{
++ (CGSize)rf_imageSizeForAsset:(PHAsset *)asset{
     CGFloat photoWidth = [UIScreen mainScreen].bounds.size.width;
     CGFloat multiple = [UIScreen mainScreen].scale;
     CGFloat aspectRatio = asset.pixelWidth / (CGFloat)asset.pixelHeight;

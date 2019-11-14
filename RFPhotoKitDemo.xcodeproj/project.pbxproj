@@ -19,11 +19,12 @@
 		213C2DF221B79C3F00B4129D /* RFPhotoKitDemoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 213C2DF121B79C3F00B4129D /* RFPhotoKitDemoUITests.m */; };
 		213C2E0C21B79C7400B4129D /* RFPhotoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 213C2E0121B79C7300B4129D /* RFPhotoCell.xib */; };
 		213C2E0E21B79C7400B4129D /* selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 213C2E0621B79C7300B4129D /* selected.png */; };
-		213C2E0F21B79C7400B4129D /* RFPhotoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 213C2E0721B79C7300B4129D /* RFPhotoController.m */; };
+		213C2E0F21B79C7400B4129D /* RFPhotoPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 213C2E0721B79C7300B4129D /* RFPhotoPickerController.m */; };
 		213C2E1021B79C7400B4129D /* normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 213C2E0921B79C7400B4129D /* normal.png */; };
 		213C2E1121B79C7400B4129D /* RFPhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 213C2E0A21B79C7400B4129D /* RFPhotoCell.m */; };
-		213C2E1221B79C7400B4129D /* RFPhotoKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 213C2E0B21B79C7400B4129D /* RFPhotoKitManager.m */; };
+		213C2E1221B79C7400B4129D /* RFPhotoTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 213C2E0B21B79C7400B4129D /* RFPhotoTool.m */; };
 		2157BFAE237AB43C00DEB006 /* UIImage+Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 2157BFAD237AB43C00DEB006 /* UIImage+Utility.m */; };
+		2190CD25237CF52800429334 /* RFPhotoManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2190CD24237CF52800429334 /* RFPhotoManager.m */; };
 		8D5E5EB9458F2871D028E0AF /* libPods-RFPhotoKitDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 66E28A7C42F20C2F8027B285 /* libPods-RFPhotoKitDemo.a */; };
 		A42C0E9AFEC087C0AAAF53D9 /* libPods-RFPhotoKitDemoUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E79D6A09C50183C24CA6D17 /* libPods-RFPhotoKitDemoUITests.a */; };
 /* End PBXBuildFile section */
@@ -65,18 +66,22 @@
 		213C2DED21B79C3F00B4129D /* RFPhotoKitDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RFPhotoKitDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		213C2DF121B79C3F00B4129D /* RFPhotoKitDemoUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RFPhotoKitDemoUITests.m; sourceTree = "<group>"; };
 		213C2DF321B79C3F00B4129D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		213C2E0021B79C7300B4129D /* RFPhotoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RFPhotoController.h; sourceTree = "<group>"; };
+		213C2E0021B79C7300B4129D /* RFPhotoPickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RFPhotoPickerController.h; sourceTree = "<group>"; };
 		213C2E0121B79C7300B4129D /* RFPhotoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RFPhotoCell.xib; sourceTree = "<group>"; };
 		213C2E0221B79C7300B4129D /* RFPhotoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RFPhotoCell.h; sourceTree = "<group>"; };
 		213C2E0421B79C7300B4129D /* RFPhotoKitConstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RFPhotoKitConstant.h; sourceTree = "<group>"; };
-		213C2E0521B79C7300B4129D /* RFPhotoKitManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RFPhotoKitManager.h; sourceTree = "<group>"; };
+		213C2E0521B79C7300B4129D /* RFPhotoTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RFPhotoTool.h; sourceTree = "<group>"; };
 		213C2E0621B79C7300B4129D /* selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = selected.png; sourceTree = "<group>"; };
-		213C2E0721B79C7300B4129D /* RFPhotoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RFPhotoController.m; sourceTree = "<group>"; };
+		213C2E0721B79C7300B4129D /* RFPhotoPickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RFPhotoPickerController.m; sourceTree = "<group>"; };
 		213C2E0921B79C7400B4129D /* normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = normal.png; sourceTree = "<group>"; };
 		213C2E0A21B79C7400B4129D /* RFPhotoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RFPhotoCell.m; sourceTree = "<group>"; };
-		213C2E0B21B79C7400B4129D /* RFPhotoKitManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RFPhotoKitManager.m; sourceTree = "<group>"; };
+		213C2E0B21B79C7400B4129D /* RFPhotoTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RFPhotoTool.m; sourceTree = "<group>"; };
 		2157BFAC237AB43C00DEB006 /* UIImage+Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Utility.h"; sourceTree = "<group>"; };
 		2157BFAD237AB43C00DEB006 /* UIImage+Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Utility.m"; sourceTree = "<group>"; };
+		2190CD21237CF36200429334 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
+		2190CD22237CF36200429334 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		2190CD23237CF52800429334 /* RFPhotoManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RFPhotoManager.h; sourceTree = "<group>"; };
+		2190CD24237CF52800429334 /* RFPhotoManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RFPhotoManager.m; sourceTree = "<group>"; };
 		66E28A7C42F20C2F8027B285 /* libPods-RFPhotoKitDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RFPhotoKitDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8D08BE975965289455CD6FB /* Pods-RFPhotoKitDemoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RFPhotoKitDemoTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RFPhotoKitDemoTests/Pods-RFPhotoKitDemoTests.debug.xcconfig"; sourceTree = "<group>"; };
 		B2EA49EAF7242CB3863532EA /* Pods-RFPhotoKitDemoUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RFPhotoKitDemoUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-RFPhotoKitDemoUITests/Pods-RFPhotoKitDemoUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -175,18 +180,20 @@
 		213C2DFF21B79C7300B4129D /* RFPhotoKit */ = {
 			isa = PBXGroup;
 			children = (
-				213C2E0921B79C7400B4129D /* normal.png */,
+				213C2E0421B79C7300B4129D /* RFPhotoKitConstant.h */,
+				2190CD23237CF52800429334 /* RFPhotoManager.h */,
+				2190CD24237CF52800429334 /* RFPhotoManager.m */,
+				213C2E0B21B79C7400B4129D /* RFPhotoTool.m */,
+				213C2E0521B79C7300B4129D /* RFPhotoTool.h */,
 				213C2E0221B79C7300B4129D /* RFPhotoCell.h */,
 				213C2E0A21B79C7400B4129D /* RFPhotoCell.m */,
 				213C2E0121B79C7300B4129D /* RFPhotoCell.xib */,
-				213C2E0021B79C7300B4129D /* RFPhotoController.h */,
-				213C2E0721B79C7300B4129D /* RFPhotoController.m */,
-				213C2E0421B79C7300B4129D /* RFPhotoKitConstant.h */,
-				213C2E0521B79C7300B4129D /* RFPhotoKitManager.h */,
-				213C2E0B21B79C7400B4129D /* RFPhotoKitManager.m */,
+				213C2E0021B79C7300B4129D /* RFPhotoPickerController.h */,
+				213C2E0721B79C7300B4129D /* RFPhotoPickerController.m */,
 				2157BFAC237AB43C00DEB006 /* UIImage+Utility.h */,
 				2157BFAD237AB43C00DEB006 /* UIImage+Utility.m */,
 				213C2E0621B79C7300B4129D /* selected.png */,
+				213C2E0921B79C7400B4129D /* normal.png */,
 			);
 			path = RFPhotoKit;
 			sourceTree = "<group>";
@@ -303,6 +310,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 213C2DBE21B79C3C00B4129D;
 			productRefGroup = 213C2DC821B79C3C00B4129D /* Products */;
@@ -428,12 +436,13 @@
 			files = (
 				213C2DCF21B79C3C00B4129D /* ViewController.m in Sources */,
 				213C2DD521B79C3C00B4129D /* RFPhotoKitDemo.xcdatamodeld in Sources */,
-				213C2E0F21B79C7400B4129D /* RFPhotoController.m in Sources */,
-				213C2E1221B79C7400B4129D /* RFPhotoKitManager.m in Sources */,
+				213C2E0F21B79C7400B4129D /* RFPhotoPickerController.m in Sources */,
+				213C2E1221B79C7400B4129D /* RFPhotoTool.m in Sources */,
 				2157BFAE237AB43C00DEB006 /* UIImage+Utility.m in Sources */,
 				213C2E1121B79C7400B4129D /* RFPhotoCell.m in Sources */,
 				213C2DDD21B79C3F00B4129D /* main.m in Sources */,
 				213C2DCC21B79C3C00B4129D /* AppDelegate.m in Sources */,
+				2190CD25237CF52800429334 /* RFPhotoManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -473,6 +482,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				213C2DD121B79C3C00B4129D /* Base */,
+				2190CD21237CF36200429334 /* zh-Hans */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -481,6 +491,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				213C2DD921B79C3F00B4129D /* Base */,
+				2190CD22237CF36200429334 /* zh-Hans */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -492,6 +503,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -551,6 +563,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";

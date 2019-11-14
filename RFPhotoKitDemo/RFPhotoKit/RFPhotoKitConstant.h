@@ -17,7 +17,7 @@
 
 #import <Photos/Photos.h>
 #import <UIKit/UIKit.h>
-#import "RFPhotoKitManager.h"
+#import "RFPhotoTool.h"
 #import "UIImage+Utility.h"
 
 #endif /* RFPhotoKitConstant_h */

@@ -7,8 +7,8 @@
 //
 
 #import "ViewController.h"
-#import "RFPhotoController.h"
-
+#import "RFPhotoManager.h"
+#import "RFPhotoKitConstant.h"
 
 @interface ViewController ()
 @property (nonatomic,strong) UITextView *textView;
@@ -19,7 +19,7 @@
 
 -(UITextView *)textView{
     if (!_textView) {
-        _textView = [[UITextView alloc]initWithFrame:CGRectMake(0, 64, RFSCREEN_WIDTH, RFSCREEN_HEIGHT - 64)];
+        _textView = [[UITextView alloc]initWithFrame:self.view.bounds];
         _textView.textContainerInset = UIEdgeInsetsZero;
         _textView.textContainer.lineFragmentPadding = 0;
     }
@@ -31,42 +31,31 @@
     [self.view addSubview:self.textView];
     self.automaticallyAdjustsScrollViewInsets = NO;
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"相册" style:UIBarButtonItemStylePlain target:self action:@selector(enterPhotoAlbum:)];
+    UIBarButtonItem *album = [[UIBarButtonItem alloc] initWithTitle:@"相册" style:UIBarButtonItemStylePlain target:self action:@selector(enterPhotoAlbum:)];
+    UIBarButtonItem *takePhoto = [[UIBarButtonItem alloc] initWithTitle:@"拍照" style:UIBarButtonItemStylePlain target:self action:@selector(takePhoto:)];
+    self.navigationItem.rightBarButtonItems = @[album,takePhoto];
+    
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"清除" style:UIBarButtonItemStylePlain target:self action:@selector(clearPhotoAlbum:)];
+}
+
+- (void)takePhoto:(UIBarButtonItem *)item {
+    __weak __typeof(self)weakSelf = self;
+    [[RFPhotoManager sharedInstance] rf_PhotoWithTakePhoto_targetVC:self callBack:^(NSArray * _Nonnull photos) {
+        __strong __typeof(weakSelf)strongSelf = weakSelf;
+        [strongSelf setTextViewWithPhotos:photos];
+    }];
+}
+
+-(void)enterPhotoAlbum:(UIBarButtonItem *)item{
+    __weak __typeof(self)weakSelf = self;
+    [[RFPhotoManager sharedInstance] rf_PhotoWithAlbum_targetVC:self callBack:^(NSArray * _Nonnull photos) {
+        __strong __typeof(weakSelf)strongSelf = weakSelf;
+        [strongSelf setTextViewWithPhotos:photos];
+    }];
 }
 
 - (void)clearPhotoAlbum:(UIBarButtonItem *)item{
     [self.textView setText:@""];
-}
-
--(void)enterPhotoAlbum:(UIBarButtonItem *)item{
-    //相册权限
-    [RFPHOTOKIT_INSTANCE rf_checkPhotoAlbumAuthorizationHandler:^(BOOL isAuthorized) {
-        if (isAuthorized) {//已授权
-            //打开相册
-            RFPhotoController *vc = [[RFPhotoController alloc]init];
-            vc.permitPicCount = 6;
-            [vc rfPhotoKitSelectedBlock:^(NSArray *result) {
-                [self setTextViewWithPhotos:result];
-            }];
-            UINavigationController *navi = [[UINavigationController alloc]initWithRootViewController:vc];
-            navi.modalPresentationStyle = UIModalPresentationFullScreen;//iOS13适配
-            
-            [self.navigationController presentViewController:navi animated:YES completion:nil];
-        }else{//未授权
-            UIAlertController * alertVC = [UIAlertController alertControllerWithTitle:@"您没赋予本程序访问相册权限" message:@"是否去设置" preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction * ok = [UIAlertAction actionWithTitle:@"去设置" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-                if ([[UIApplication sharedApplication] canOpenURL:url]) {
-                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
-                }
-            }];
-            UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"不去" style:UIAlertActionStyleCancel handler:nil];
-            [alertVC addAction:cancel];
-            [alertVC addAction:ok];
-            [self presentViewController:alertVC animated:NO completion:NULL];
-        }
-    }];
 }
 
 -(void)setTextViewWithPhotos:(NSArray*)photos{
@@ -85,7 +74,6 @@
         self.textView.selectedRange = NSMakeRange(location + 1,0);
     }
 }
-
 
 //显示图片的大小 （全屏）
 - (CGSize)displaySizeWithImage:(UIImage *)image {

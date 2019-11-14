@@ -1,5 +1,5 @@
 //
-//  RFPhotoController.h
+//  RFPhotoPickerController.h
 //  RFPhotoKitTest
 //
 //  Created by riceFun on 2018/5/3.
@@ -7,14 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "RFPhotoKitManager.h"
+#import "RFPhotoTool.h"
 #import "RFPhotoKitConstant.h"
 
 typedef  void(^RFPhotoResultBlock)(NSArray *result);
 
-@interface RFPhotoController : UIViewController
+@interface RFPhotoPickerController : UIViewController
 @property (nonatomic,assign) NSInteger permitPicCount;
 
--(void)rfPhotoKitSelectedBlock:(RFPhotoResultBlock)photoResultBlock;
+-(void)rf_photoPickerSelectedBlock:(RFPhotoResultBlock)photoResultBlock;
 
 @end

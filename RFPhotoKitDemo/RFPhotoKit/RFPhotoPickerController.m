@@ -6,7 +6,7 @@
 //  Copyright © 2018年 riceFun. All rights reserved.
 //
 
-#import "RFPhotoController.h"
+#import "RFPhotoPickerController.h"
 #import "RFPhotoCell.h"
 
 #import <objc/runtime.h>
@@ -16,7 +16,7 @@ const void * _Nonnull rfPhotoKitkey;
 #define rfCollectionViewCellReusedKey @"rfCollectionViewCellReusedKey"
 #define rfTableViewCellReusedKey @"rfTableViewCellReusedKey"
 
-@interface RFPhotoController ()<UICollectionViewDataSource,UICollectionViewDelegate,UITableViewDelegate,UITableViewDataSource>
+@interface RFPhotoPickerController ()<UICollectionViewDataSource,UICollectionViewDelegate,UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic,strong)UIButton *albumSelectBtn;
 @property (nonatomic,strong)UICollectionView *photoCollectView;
 @property (nonatomic,strong)UITableView *albumlistView;
@@ -28,7 +28,7 @@ const void * _Nonnull rfPhotoKitkey;
 
 @end
 
-@implementation RFPhotoController
+@implementation RFPhotoPickerController
 
 #pragma mark lifeCycle
 - (void)viewDidLoad {
@@ -38,16 +38,16 @@ const void * _Nonnull rfPhotoKitkey;
 }
 
 #pragma mark public
-- (void)rfPhotoKitSelectedBlock:(RFPhotoResultBlock)photoResultBlock{
+- (void)rf_photoPickerSelectedBlock:(RFPhotoResultBlock)photoResultBlock{
     objc_setAssociatedObject(self, rfPhotoKitkey, photoResultBlock, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 #pragma mark privite
 - (void)initData{
-    NSArray *pAllAlbum = [RFPHOTOKIT_INSTANCE rf_queryAllAlbums];
+    NSArray *pAllAlbum = [RFPhotoTool rf_queryAllAlbums];
     NSMutableArray *tempAllAlbum = [[NSMutableArray alloc] initWithCapacity:5];
     for (PHAssetCollection *sub in pAllAlbum) {
-        PHFetchResult *result = [RFPHOTOKIT_INSTANCE rf_queryFetchResultWithAssetCollection:sub mediaType:(PHAssetMediaTypeImage) ascend:NO];
+        PHFetchResult *result = [RFPhotoTool rf_queryFetchResultWithAssetCollection:sub mediaType:(PHAssetMediaTypeImage) ascend:NO];
         //去掉内容为空的相册
         if (result.count > 0) {
             [tempAllAlbum addObject:sub];
@@ -56,7 +56,7 @@ const void * _Nonnull rfPhotoKitkey;
     
     self.allAlbum = [tempAllAlbum copy];
     self.currentAssetCollectionLocalIdentifier = self.allAlbum.firstObject.localIdentifier;
-    self.currentAlbum = [RFPHOTOKIT_INSTANCE rf_queryFetchResultWithAssetCollection:self.allAlbum.firstObject mediaType:(PHAssetMediaTypeImage) ascend:NO];
+    self.currentAlbum = [RFPhotoTool rf_queryFetchResultWithAssetCollection:self.allAlbum.firstObject mediaType:(PHAssetMediaTypeImage) ascend:NO];
 
 }
 
@@ -75,7 +75,7 @@ const void * _Nonnull rfPhotoKitkey;
 
 - (void)finishSelected{
     __weak __typeof(self)weakSelf = self;
-    [RFPHOTOKIT_INSTANCE rf_getImagesForAssets:self.selectedAssets progressHandler:^(double progress, NSError *error, BOOL *stop, NSDictionary *info) {
+    [RFPhotoTool rf_getImagesForAssets:self.selectedAssets progressHandler:^(double progress, NSError *error, BOOL *stop, NSDictionary *info) {
         if (error) {
             NSLog(@"iClound error:  %@ ",error);
             [SVProgressHUD dismiss];
@@ -129,7 +129,7 @@ const void * _Nonnull rfPhotoKitkey;
     
     #pragma mark 单个图片资源
     //请求低质量的小图
-    [RFPHOTOKIT_INSTANCE rf_getImageLowQualityForAsset:asset targetSize:cell.frame.size resultHandler:^(UIImage *result, NSDictionary *info) {
+    [RFPhotoTool rf_getImageLowQualityForAsset:asset targetSize:cell.frame.size resultHandler:^(UIImage *result, NSDictionary *info) {
         if (result) {
             cell.image = result;
         }
@@ -174,9 +174,9 @@ const void * _Nonnull rfPhotoKitkey;
         cell.textLabel.textColor = [UIColor whiteColor];
     }
     PHAssetCollection *assetCollection = self.allAlbum[indexPath.row];
-    PHFetchResult *result = [RFPHOTOKIT_INSTANCE rf_queryFetchResultWithAssetCollection:assetCollection mediaType:(PHAssetMediaTypeImage) ascend:NO];
+    PHFetchResult *result = [RFPhotoTool rf_queryFetchResultWithAssetCollection:assetCollection mediaType:(PHAssetMediaTypeImage) ascend:NO];
     
-    NSString *albumName = [RFPHOTOKIT_INSTANCE rf_albumChineseNameWithAssetCollection:assetCollection];
+    NSString *albumName = [RFPhotoTool rf_albumChineseNameWithAssetCollection:assetCollection];
     
 //    NSLog(@"\"%@\":\"\",",albumName);
     NSString *title = [NSString stringWithFormat:@"%@ (%lu)",albumName,(unsigned long)result.count];
@@ -194,7 +194,7 @@ const void * _Nonnull rfPhotoKitkey;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     PHAssetCollection *assetCollection = self.allAlbum[indexPath.row];
-    PHFetchResult *result = [RFPHOTOKIT_INSTANCE rf_queryFetchResultWithAssetCollection:assetCollection mediaType:(PHAssetMediaTypeImage) ascend:NO];
+    PHFetchResult *result = [RFPhotoTool rf_queryFetchResultWithAssetCollection:assetCollection mediaType:(PHAssetMediaTypeImage) ascend:NO];
     self.currentAssetCollectionLocalIdentifier = assetCollection.localIdentifier;
     NSLog(@"localIdentifier--> %@",assetCollection.localIdentifier);
     self.currentAlbum = result;
