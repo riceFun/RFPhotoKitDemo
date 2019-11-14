@@ -77,6 +77,10 @@ const void * _Nonnull rfPhotoKitkey;
 }
 
 - (void)finishSelected{
+    if (self.selectedAssets.count == 0) {
+        [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+        return;
+    }
     __weak __typeof(self)weakSelf = self;
     [RFPhotoTool rf_getImagesForAssets:self.selectedAssets progressHandler:^(double progress, NSError *error, BOOL *stop, NSDictionary *info) {
         if (error) {

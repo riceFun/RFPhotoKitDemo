@@ -51,7 +51,7 @@
 }
 
 //相册获取图片
-- (void)rf_PhotoWithAlbum_targetVC:(UIViewController *)targetVC callBack:(RFPhotoManagerCallBack)callBack {
+- (void)rf_PhotoWithAlbum_targetVC:(UIViewController *)targetVC maxCount:(NSUInteger)maxCount callBack:(RFPhotoManagerCallBack)callBack {
     self.callBack = callBack;
     __weak __typeof(self)weakSelf = self;
     //相册权限
@@ -60,7 +60,7 @@
         if (isAuthorized) {//已授权
             //打开相册
             RFPhotoPickerController *vc = [[RFPhotoPickerController alloc]init];
-            vc.permitPicCount = 6;
+            vc.permitPicCount = maxCount;
             [vc rf_photoPickerSelectedBlock:^(NSArray *result) {
                 if (result) {
                     strongSelf.callBack(result);
