@@ -14,9 +14,9 @@ typedef void(^RFPhotoManagerCallBack)(NSArray *photos);
 @interface RFPhotoManager : NSObject
 + (RFPhotoManager *)sharedInstance;
 //拍照获取图片
-- (void)rf_PhotoWithAlbum_targetVC:(UIViewController *)targetVC maxCount:(NSUInteger)maxCount callBack:(RFPhotoManagerCallBack)callBack;
+- (void)rf_PhotoWithTakePhoto_targetVC:(UIViewController *)targetVC callBack:(RFPhotoManagerCallBack)callBack;
 //相册获取图片
-- (void)rf_PhotoWithAlbum_targetVC:(UIViewController *)targetVC callBack:(RFPhotoManagerCallBack)callBack;
+- (void)rf_PhotoWithAlbum_targetVC:(UIViewController *)targetVC maxCount:(NSUInteger)maxCount callBack:(RFPhotoManagerCallBack)callBack;
 
 @end
 

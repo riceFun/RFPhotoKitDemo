@@ -23,6 +23,7 @@ const void * _Nonnull rfPhotoKitkey;
 @property (nonatomic,strong)UIButton *albumSelectBtn;
 @property (nonatomic,strong)UICollectionView *photoCollectView;
 @property (nonatomic,strong)UITableView *albumlistView;
+@property (nonatomic,strong)UIButton *finishBtn;
 
 @property (nonatomic,strong)NSArray<PHAssetCollection *> *allAlbum;//所有相册
 @property (nonatomic,strong)NSString *currentAssetCollectionLocalIdentifier;//用于判断当前是在哪个相册中
@@ -38,6 +39,11 @@ const void * _Nonnull rfPhotoKitkey;
     [super viewDidLoad];
     [self initData];
     [self setupUI];    
+}
+
+- (void)dealloc {
+    //删除指定的key路径监听器
+    [self.selectedAssets removeObserver:self forKeyPath:@"count"];
 }
 
 #pragma mark public
@@ -60,11 +66,11 @@ const void * _Nonnull rfPhotoKitkey;
     self.allAlbum = [tempAllAlbum copy];
     self.currentAssetCollectionLocalIdentifier = self.allAlbum.firstObject.localIdentifier;
     self.currentAlbum = [RFPhotoTool rf_queryFetchResultWithAssetCollection:self.allAlbum.firstObject mediaType:(PHAssetMediaTypeImage) ascend:NO];
-
 }
 
 - (void)setupUI{
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:self action:@selector(finishSelected)];
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:self action:@selector(finishSelected)];
+     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.finishBtn];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(finishBack)];
     self.navigationItem.titleView = self.albumSelectBtn;
     [self.view addSubview:self.photoCollectView];
@@ -85,7 +91,7 @@ const void * _Nonnull rfPhotoKitkey;
     [RFPhotoTool rf_getImagesForAssets:self.selectedAssets progressHandler:^(double progress, NSError *error, BOOL *stop, NSDictionary *info) {
         if (error) {
             NSLog(@"iClound error:  %@ ",error);
-            return ;
+            return;
         }
         NSLog(@"同步iCloud中");
     } resultHandler:^(NSArray<NSDictionary *> *result) {
@@ -101,6 +107,7 @@ const void * _Nonnull rfPhotoKitkey;
     PHAsset *asset = self.currentAlbum[indexPath.item];
     if (![self.selectedAssets containsObject:asset]) {
         [self.selectedAssets addObject:asset];
+        [self changeFinishBtnStatus];
     }
 }
 
@@ -108,6 +115,15 @@ const void * _Nonnull rfPhotoKitkey;
     PHAsset *asset = self.currentAlbum[indexPath.item];
     if ([self.selectedAssets containsObject:asset]) {
         [self.selectedAssets removeObject:asset];
+        [self changeFinishBtnStatus];
+    }
+}
+
+- (void)changeFinishBtnStatus {
+    if (self.selectedAssets.count > 0) {
+        self.finishBtn.hidden = NO;
+    } else {
+        self.finishBtn.hidden = YES;
     }
 }
 
@@ -226,7 +242,24 @@ const void * _Nonnull rfPhotoKitkey;
     }
 }
 
+- (void)click_finishBtn:(UIButton *)btn {
+    [self finishSelected];
+}
+
 #pragma mark -lazyLoad
+- (UIButton *)finishBtn {
+    if (!_finishBtn) {
+        _finishBtn = [[UIButton alloc] init];
+        _finishBtn.backgroundColor = [UIColor greenColor];
+        [_finishBtn setTitle:@" 完成 " forState:(UIControlStateNormal)];
+        [_finishBtn setTitleColor:[UIColor whiteColor] forState:(UIControlStateNormal)];
+        [_finishBtn addTarget:self action:@selector(click_finishBtn:) forControlEvents:(UIControlEventTouchUpInside)];
+        _finishBtn.layer.cornerRadius = 5;
+        _finishBtn.hidden = YES;
+    }
+    return _finishBtn;
+}
+
 - (UIButton *)albumSelectBtn {
     if (!_albumSelectBtn) {
         _albumSelectBtn = [[UIButton alloc] init];

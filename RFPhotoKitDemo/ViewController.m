@@ -47,7 +47,7 @@
 
 -(void)enterPhotoAlbum:(UIBarButtonItem *)item{
     __weak __typeof(self)weakSelf = self;
-    [[RFPhotoManager sharedInstance] rf_PhotoWithAlbum_targetVC:self callBack:^(NSArray * _Nonnull photos) {
+    [[RFPhotoManager sharedInstance] rf_PhotoWithAlbum_targetVC:self maxCount:6 callBack:^(NSArray * _Nonnull photos) {
         __strong __typeof(weakSelf)strongSelf = weakSelf;
         [strongSelf setTextViewWithPhotos:photos];
     }];
